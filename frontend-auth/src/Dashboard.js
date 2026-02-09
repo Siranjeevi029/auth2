@@ -22,34 +22,6 @@ const Dashboard = () => {
     notifications: true
   });
 
-  const fetchDashboardData = useCallback(async () => {
-    try {
-      setLoading(true);
-      
-      // Fetch user profile
-      const profileRes = await api.get('/api/user/profile');
-      setUserProfile(profileRes.data);
-
-      // Fetch dashboard statistics
-      await fetchStats();
-      
-      // Generate recent activity (mock data for now)
-      generateRecentActivity();
-      
-      // Generate quick stats
-      generateQuickStats();
-      
-    } catch (error) {
-      console.error('Failed to fetch dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchStats, generateRecentActivity, generateQuickStats]);
-
-  useEffect(() => {
-    fetchDashboardData();
-  }, [fetchDashboardData]);
-
   const fetchStats = useCallback(async () => {
     try {
       // Fetch various statistics from different endpoints
@@ -93,6 +65,34 @@ const Dashboard = () => {
     ];
     setQuickStats(stats);
   }, []);
+
+  const fetchDashboardData = useCallback(async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch user profile
+      const profileRes = await api.get('/api/user/profile');
+      setUserProfile(profileRes.data);
+
+      // Fetch dashboard statistics
+      await fetchStats();
+      
+      // Generate recent activity (mock data for now)
+      generateRecentActivity();
+      
+      // Generate quick stats
+      generateQuickStats();
+      
+    } catch (error) {
+      console.error('Failed to fetch dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchStats, generateRecentActivity, generateQuickStats]);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
 
   const StatCard = ({ title, value, icon, color = 'red', trend }) => (
     <div className="glass-morphism rounded-2xl p-6 card-hover animate-fadeInUp backdrop-blur-sm border border-white/20">

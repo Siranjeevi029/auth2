@@ -1,0 +1,188 @@
+[33mcommit 0e9b3ef9fc399f1234b9d13563f9893fae381fa3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Mon Feb 9 17:47:46 2026 +0530
+
+    ai_intern
+
+[33mcommit 78efbb67eb91c7b2261ec68e5af6ab16d73cf502[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Fri Oct 24 11:24:09 2025 +0530
+
+    dashboard and analysis
+
+[33mcommit ed42e8d9680ecfb300b57a4222013e4c0f57cea5[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Tue Oct 14 21:34:11 2025 +0530
+
+    everything works other than video call
+
+[33mcommit 72b3e63425b840c1330cb07fadb75e36e17de3fc[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Mon Sep 8 08:24:38 2025 +0530
+
+    date and time 3
+
+[33mcommit ce838a615a69240326176208445f93a0a8e3ac8e[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:54:25 2025 +0530
+
+    date 3
+
+[33mcommit abbfc4937625d7cef84a37c889be2562ab843ff1[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:47:55 2025 +0530
+
+    date error 2
+
+[33mcommit 66bb16acd679094822a7e595eef3c6b289ad008e[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:41:28 2025 +0530
+
+    date format error
+
+[33mcommit 66506a6cbc2403d6edc8575a04dc3747af9341ad[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:37:52 2025 +0530
+
+    time and stuff
+
+[33mcommit 79083063ea810f45d7431a211c2f430187659c6b[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:34:12 2025 +0530
+
+    timing issue
+
+[33mcommit 54da491d02b73cc60ff199e44fc150a79e9057c9[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:29:35 2025 +0530
+
+    google cors
+
+[33mcommit 6f75cb3ba9bc149afd1eaa3403558dc034ae575d[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:22:51 2025 +0530
+
+    chatpage 2
+
+[33mcommit 098ebca0ff116a463d8224d2b3342e7ad8cf7fa0[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:16:24 2025 +0530
+
+    chatpage error
+
+[33mcommit 4ac4f208a102b12100181615068721da0b6f84a3[m
+Merge: 0d5dbb1 71f7e92
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:08:40 2025 +0530
+
+    cors 3
+
+[33mcommit 0d5dbb187411fa750151f8da57f6c83f6bf95a20[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:06:11 2025 +0530
+
+    cors 2
+
+[33mcommit 71f7e9230fa46e7b1a5d93675e21609ee7795608[m
+Author: Siranjeevi029 <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 22:00:02 2025 +0530
+
+    Update CorsConfig.java
+    
+    cors
+
+[33mcommit e3b09e8dd1e71f5acb84f4004f1609316119f436[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 21:44:25 2025 +0530
+
+    frontend deploy
+
+[33mcommit fdabce0d6eacc0248841879de01f9deff1a48e6b[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 21:14:12 2025 +0530
+
+    docker change for jar file
+
+[33mcommit 2074b8e36dea70181aa08729e32ebfecb9fe600b[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 21:08:44 2025 +0530
+
+    docker change 3
+
+[33mcommit 0b84491c934834376ada6dbd8e6b7da2f623f6d1[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 21:08:15 2025 +0530
+
+    docker change again
+
+[33mcommit 642629b226a4fbd412ac6ad75187e945f046a1f4[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 21:04:19 2025 +0530
+
+    docker file change
+
+[33mcommit f71539d8c0f2f3471ae2258ec2a4934b4cc558dc[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Sun Sep 7 21:01:18 2025 +0530
+
+    meet testing
+
+[33mcommit 4a3e6c545be01794e4ecb64b4d3f2a9cc7c73c11[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Thu Sep 4 14:57:45 2025 +0530
+
+    styling with wind surf
+
+[33mcommit 128101805b17ddb957df9dd005cdc68b13f618f2[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Thu Sep 4 11:00:27 2025 +0530
+
+    individual red icon for messages
+
+[33mcommit 02bc40e8d3250d068a605e4f6ef6c006e13bd166[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Tue Sep 2 22:12:48 2025 +0530
+
+    tailwind
+
+[33mcommit fe691f5498431afdd768fd151c71a3287a835253[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Thu Aug 28 16:30:32 2025 +0530
+
+    chat and frnds
+
+[33mcommit 16f141770b65e2265344edf8baa8d146d0f1c029[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Thu Aug 28 16:28:30 2025 +0530
+
+    mistake with repo
+
+[33mcommit 73e649b584cb82b183db55910a4454bd6f4a86df[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Thu Aug 28 16:21:59 2025 +0530
+
+    frnd list and chat page updation
+
+[33mcommit 24b56f9d49a914d4c2bcf49f9159b16dc024f9ef[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Thu Aug 28 16:13:16 2025 +0530
+
+    frndlist and chatpage
+
+[33mcommit acdb9590eb98c3090024eb1ac21ac33fca18a4cf[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Wed Aug 27 18:59:53 2025 +0530
+
+    profile setup
+
+[33mcommit d7e7002d8c6e6600ffd1c22988584a071f61a126[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Thu Aug 21 19:21:50 2025 +0530
+
+    mongodb setup
+
+[33mcommit 8395b2c805e2e282b4e1c37a5182c0264a130167[m
+Author: Siranjeevi <siranjeevi73389@gmail.com>
+Date:   Wed Aug 20 13:06:53 2025 +0530
+
+    auth

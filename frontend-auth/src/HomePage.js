@@ -38,7 +38,6 @@ const HomePage = ({ setErrorMessage }) => {
   const [activeTab, setActiveTab] = useState('matches');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [emailToUsername, setEmailToUsername] = useState({});
   const [unreadFriendRequests, setUnreadFriendRequests] = useState(0);
   const [unreadMessagesPerFriend, setUnreadMessagesPerFriend] = useState({});
   const [scheduledMeetings, setScheduledMeetings] = useState([]);
@@ -87,10 +86,6 @@ const HomePage = ({ setErrorMessage }) => {
       const sortedFriends = friendsWithLastMessage.sort((a, b) => b.lastMessageTimestamp - a.lastMessageTimestamp);
       setFriends(sortedFriends);
       
-      const newMap = {};
-      sortedFriends.forEach(f => newMap[f.email] = f.username);
-      setEmailToUsername(newMap);
-
       const unreadRequestsRes = await api.get('/api/friend/requests/unread-count');
       setUnreadFriendRequests(unreadRequestsRes.data.count || 0);
 

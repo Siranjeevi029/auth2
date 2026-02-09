@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const Analytics = () => {
   const [analyticsData, setAnalyticsData] = useState({
@@ -15,11 +15,7 @@ const Analytics = () => {
   const [timeRange, setTimeRange] = useState('week');
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchAnalyticsData();
-  }, [timeRange]);
-
-  const fetchAnalyticsData = async () => {
+  const fetchAnalyticsData = useCallback(async () => {
     try {
       setLoading(true);
       // Mock data for now - replace with actual API calls
@@ -29,7 +25,11 @@ const Analytics = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchAnalyticsData();
+  }, [timeRange, fetchAnalyticsData]);
 
   const generateMockData = () => {
     // Generate mock weekly activity data

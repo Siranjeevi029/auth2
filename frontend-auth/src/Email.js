@@ -53,7 +53,7 @@ const Email = ({email}) => {
     } finally {
       setLoading(false);
     }
-  }, [email]);
+  }, [email, fetchTimer]);
 
   // Reset component state when email changes (new OTP generated)
   useEffect(() => {

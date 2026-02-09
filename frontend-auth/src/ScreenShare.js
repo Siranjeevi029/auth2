@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { format } from 'date-fns';
 
 // Helper function to safely parse dates (same as in ChatPage)
@@ -45,12 +45,12 @@ const ScreenShare = ({ meeting, onEndCall, currentUserEmail }) => {
   const callStartTimeRef = useRef(null);
 
   // WebRTC configuration
-  const rtcConfig = {
+  const rtcConfig = useMemo(() => ({
     iceServers: [
       { urls: 'stun:stun.l.google.com:19302' },
       { urls: 'stun:stun1.l.google.com:19302' }
     ]
-  };
+  }), []);
 
   const simulateRemoteScreenShare = useCallback(() => {
     // Create a canvas to simulate remote screen content
@@ -182,7 +182,7 @@ const ScreenShare = ({ meeting, onEndCall, currentUserEmail }) => {
       setError('Unable to access microphone. Please check permissions.');
       setIsConnecting(false);
     }
-  }, [demoMode, simulateRemoteScreenShare]);
+  }, [demoMode, simulateRemoteScreenShare, rtcConfig]);
 
   useEffect(() => {
     initializeCall();

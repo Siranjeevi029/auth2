@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const Reports = () => {
   const [reportData, setReportData] = useState({
@@ -18,11 +18,7 @@ const Reports = () => {
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
 
-  useEffect(() => {
-    fetchReportData();
-  }, [selectedPeriod, reportType]);
-
-  const fetchReportData = async () => {
+  const fetchReportData = useCallback(async () => {
     try {
       setLoading(true);
       // Mock data generation - replace with actual API calls
@@ -32,7 +28,11 @@ const Reports = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchReportData();
+  }, [selectedPeriod, reportType, fetchReportData]);
 
   const generateMockReportData = () => {
     const summary = {
