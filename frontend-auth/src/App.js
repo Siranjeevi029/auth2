@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import api from './axios';
 import Login from './Login';
@@ -241,6 +241,7 @@ function App() {
         </nav>
         <main className="max-w-6xl mx-auto p-6">
           <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route
               path="/login"
               element={

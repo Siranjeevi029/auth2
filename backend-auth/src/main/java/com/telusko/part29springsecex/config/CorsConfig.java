@@ -16,7 +16,11 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000","https://authorization-frontend-yui1.onrender.com"));
+        config.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://authorization-frontend-yui1.onrender.com",
+                "https://authorization-frontend.netlify.app"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
