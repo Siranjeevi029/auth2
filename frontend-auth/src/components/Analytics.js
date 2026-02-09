@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import api from '../axios';
 
 const Analytics = () => {
   const [analyticsData, setAnalyticsData] = useState({

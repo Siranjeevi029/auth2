@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import api from './axios';
@@ -23,21 +23,9 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [waitTime, setWaitTime] = useState(0);
   const [isWaiting, setIsWaiting] = useState(false);
 
-  useEffect(() => {
-    setErrorMessage('');
-    const token = localStorage.getItem('token');
-    if (token) {
-      console.log('Token:', token);
-      fetchUserData(token);
-    } else if (location.pathname !== '/login' && location.pathname !== '/register' && location.pathname !== '/email') {
-      navigate('/login');
-    }
-  }, [location.pathname]);
-
-  const fetchUserData = async (token) => {
+  const fetchUserData = useCallback(async (token) => {
     try {
       const statusRes = await api.get('/api/user/status');
       try {
@@ -61,7 +49,18 @@ function App() {
       localStorage.removeItem('token');
       navigate('/login');
     }
-  };
+  }, [navigate, location.pathname]);
+
+  useEffect(() => {
+    setErrorMessage('');
+    const token = localStorage.getItem('token');
+    if (token) {
+      console.log('Token:', token);
+      fetchUserData(token);
+    } else if (location.pathname !== '/login' && location.pathname !== '/register' && location.pathname !== '/email') {
+      navigate('/login');
+    }
+  }, [location.pathname, navigate, fetchUserData]);
 
   const handleGoogleSignIn = async (credentialResponse) => {
     setErrorMessage('');
@@ -136,24 +135,21 @@ function App() {
       
       // Check if it's a wait message
       if (errorMsg.includes('Please wait') && errorMsg.includes('seconds')) {
-        const waitSeconds = parseInt(errorMsg.match(/\d+/)[0]);
-        setWaitTime(waitSeconds);
+        const waitSeconds = parseInt(errorMsg.match(/\d+/)[0], 10);
         setIsWaiting(true);
-        setErrorMessage(`Please wait ${waitSeconds} seconds before requesting a new OTP`);
+        let remaining = waitSeconds;
+        setErrorMessage(`Please wait ${remaining} seconds before requesting a new OTP`);
         
         // Start countdown timer
         const timer = setInterval(() => {
-          setWaitTime(prev => {
-            if (prev <= 1) {
-              setIsWaiting(false);
-              setErrorMessage('');
-              clearInterval(timer);
-              return 0;
-            }
-            const newTime = prev - 1;
-            setErrorMessage(`Please wait ${newTime} seconds before requesting a new OTP`);
-            return newTime;
-          });
+          remaining -= 1;
+          if (remaining <= 0) {
+            setIsWaiting(false);
+            setErrorMessage('');
+            clearInterval(timer);
+            return;
+          }
+          setErrorMessage(`Please wait ${remaining} seconds before requesting a new OTP`);
         }, 1000);
       } else {
         setErrorMessage(errorMsg.includes('already exists') ? 'Username already exists' : errorMsg);

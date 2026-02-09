@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import api from './axios';
 import { format } from 'date-fns';
@@ -16,7 +16,6 @@ const ChatPage = () => {
   const [scheduledTime, setScheduledTime] = useState('');
   const [scheduledDate, setScheduledDate] = useState('');
   const [duration, setDuration] = useState(30); // Default 30 minutes
-  const [videoCallRequests, setVideoCallRequests] = useState([]);
   const [scheduledMeeting, setScheduledMeeting] = useState(null);
   const [pendingRequest, setPendingRequest] = useState(null);
   const [isInVideoCall, setIsInVideoCall] = useState(false);
@@ -166,8 +165,6 @@ const ChatPage = () => {
     };
     
     // Validate meeting timing
-    const endTime = new Date(scheduledDateTime.getTime() + (duration * 60 * 1000));
-    
     try {
       // Send video call request to backend
       const response = await api.post('/api/video-call/request', requestData);
@@ -231,7 +228,7 @@ const ChatPage = () => {
     }
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const profileRes = await api.get('/api/user/profile');
       setUserProfile(profileRes.data);
@@ -269,13 +266,13 @@ const ChatPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [friendEmail]);
 
   useEffect(() => {
     fetchData();
     const interval = setInterval(fetchData, 5000);
     return () => clearInterval(interval);
-  }, [friendEmail]);
+  }, [fetchData]);
 
   useEffect(() => {
     if (chatRef.current) {

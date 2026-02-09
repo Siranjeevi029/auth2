@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { format } from 'date-fns';
 
 // Helper function to safely parse dates (same as in ChatPage)
@@ -37,12 +37,9 @@ const ScreenShare = ({ meeting, onEndCall, currentUserEmail }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [callDuration, setCallDuration] = useState(0);
   const [error, setError] = useState('');
-  const [availableTabs, setAvailableTabs] = useState([]);
-  const [selectedTab, setSelectedTab] = useState(null);
   const [demoMode, setDemoMode] = useState(true); // Enable demo mode for single-user testing
   const [simulatedRemoteScreen, setSimulatedRemoteScreen] = useState(null);
 
-  const localAudioRef = useRef(null);
   const remoteScreenRef = useRef(null);
   const peerConnectionRef = useRef(null);
   const callStartTimeRef = useRef(null);
@@ -55,24 +52,75 @@ const ScreenShare = ({ meeting, onEndCall, currentUserEmail }) => {
     ]
   };
 
-  useEffect(() => {
-    initializeCall();
-    callStartTimeRef.current = Date.now();
+  const simulateRemoteScreenShare = useCallback(() => {
+    // Create a canvas to simulate remote screen content
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 600;
+    const ctx = canvas.getContext('2d');
     
-    // Update call duration every second
-    const durationInterval = setInterval(() => {
-      if (callStartTimeRef.current) {
-        setCallDuration(Math.floor((Date.now() - callStartTimeRef.current) / 1000));
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(durationInterval);
-      cleanup();
+    // Draw simulated screen content
+    const drawSimulatedScreen = () => {
+      // Background
+      ctx.fillStyle = '#1f2937';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Simulated browser window
+      ctx.fillStyle = '#374151';
+      ctx.fillRect(50, 50, canvas.width - 100, canvas.height - 100);
+      
+      // Address bar
+      ctx.fillStyle = '#4b5563';
+      ctx.fillRect(70, 70, canvas.width - 140, 40);
+      
+      // Content area
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(70, 120, canvas.width - 140, canvas.height - 190);
+      
+      // Simulated text content
+      ctx.fillStyle = '#000000';
+      ctx.font = '16px Arial';
+      ctx.fillText('ðŸ–¥ï¸ Simulated Remote Screen Share', 100, 160);
+      ctx.fillText('This is what the other user is sharing', 100, 190);
+      ctx.fillText('â€¢ Document editing', 100, 220);
+      ctx.fillText('â€¢ Code collaboration', 100, 250);
+      ctx.fillText('â€¢ Presentation slides', 100, 280);
+      
+      // Animated element
+      const time = Date.now() / 1000;
+      const x = 100 + Math.sin(time) * 50;
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(x, 320, 20, 20);
+      ctx.fillStyle = '#000000';
+      ctx.fillText('â† Animated cursor', x + 30, 335);
     };
+    
+    // Update canvas content periodically
+    const updateInterval = setInterval(drawSimulatedScreen, 100);
+    drawSimulatedScreen();
+    
+    // Convert canvas to video stream
+    const stream = canvas.captureStream(30);
+    setSimulatedRemoteScreen(stream);
+    
+    if (remoteScreenRef.current) {
+      remoteScreenRef.current.srcObject = stream;
+    }
+    
+    // Clean up on component unmount
+    return () => clearInterval(updateInterval);
   }, []);
 
-  const initializeCall = async () => {
+  const cleanup = useCallback(() => {
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+    }
+    if (peerConnectionRef.current) {
+      peerConnectionRef.current.close();
+    }
+  }, [localStream]);
+
+  const initializeCall = useCallback(async () => {
     try {
       // Get audio only (no camera)
       const audioStream = await navigator.mediaDevices.getUserMedia({
@@ -134,66 +182,26 @@ const ScreenShare = ({ meeting, onEndCall, currentUserEmail }) => {
       setError('Unable to access microphone. Please check permissions.');
       setIsConnecting(false);
     }
-  };
+  }, [demoMode, simulateRemoteScreenShare]);
 
-  const simulateRemoteScreenShare = () => {
-    // Create a canvas to simulate remote screen content
-    const canvas = document.createElement('canvas');
-    canvas.width = 800;
-    canvas.height = 600;
-    const ctx = canvas.getContext('2d');
+  useEffect(() => {
+    initializeCall();
+    callStartTimeRef.current = Date.now();
     
-    // Draw simulated screen content
-    const drawSimulatedScreen = () => {
-      // Background
-      ctx.fillStyle = '#1f2937';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Simulated browser window
-      ctx.fillStyle = '#374151';
-      ctx.fillRect(50, 50, canvas.width - 100, canvas.height - 100);
-      
-      // Address bar
-      ctx.fillStyle = '#4b5563';
-      ctx.fillRect(70, 70, canvas.width - 140, 40);
-      
-      // Content area
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(70, 120, canvas.width - 140, canvas.height - 190);
-      
-      // Simulated text content
-      ctx.fillStyle = '#000000';
-      ctx.font = '16px Arial';
-      ctx.fillText('🖥️ Simulated Remote Screen Share', 100, 160);
-      ctx.fillText('This is what the other user is sharing', 100, 190);
-      ctx.fillText('• Document editing', 100, 220);
-      ctx.fillText('• Code collaboration', 100, 250);
-      ctx.fillText('• Presentation slides', 100, 280);
-      
-      // Animated element
-      const time = Date.now() / 1000;
-      const x = 100 + Math.sin(time) * 50;
-      ctx.fillStyle = '#ef4444';
-      ctx.fillRect(x, 320, 20, 20);
-      ctx.fillStyle = '#000000';
-      ctx.fillText('← Animated cursor', x + 30, 335);
+    // Update call duration every second
+    const durationInterval = setInterval(() => {
+      if (callStartTimeRef.current) {
+        setCallDuration(Math.floor((Date.now() - callStartTimeRef.current) / 1000));
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(durationInterval);
+      cleanup();
     };
-    
-    // Update canvas content periodically
-    const updateInterval = setInterval(drawSimulatedScreen, 100);
-    drawSimulatedScreen();
-    
-    // Convert canvas to video stream
-    const stream = canvas.captureStream(30);
-    setSimulatedRemoteScreen(stream);
-    
-    if (remoteScreenRef.current) {
-      remoteScreenRef.current.srcObject = stream;
-    }
-    
-    // Clean up on component unmount
-    return () => clearInterval(updateInterval);
-  };
+  }, [cleanup, initializeCall]);
+
+  
 
   const startScreenShare = async () => {
     try {
@@ -307,15 +315,6 @@ const ScreenShare = ({ meeting, onEndCall, currentUserEmail }) => {
   const endCall = () => {
     cleanup();
     onEndCall();
-  };
-
-  const cleanup = () => {
-    if (localStream) {
-      localStream.getTracks().forEach(track => track.stop());
-    }
-    if (peerConnectionRef.current) {
-      peerConnectionRef.current.close();
-    }
   };
 
   const formatDuration = (seconds) => {

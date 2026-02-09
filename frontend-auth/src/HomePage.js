@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import api from './axios';
 import ScreenShare from './ScreenShare';
@@ -39,15 +39,14 @@ const HomePage = ({ setErrorMessage }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [emailToUsername, setEmailToUsername] = useState({});
-  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [unreadFriendRequests, setUnreadFriendRequests] = useState(0);
-  const [unreadMessages, setUnreadMessages] = useState(0);
   const [unreadMessagesPerFriend, setUnreadMessagesPerFriend] = useState({});
   const [scheduledMeetings, setScheduledMeetings] = useState([]);
   const [isInVideoCall, setIsInVideoCall] = useState(false);
   const [currentMeeting, setCurrentMeeting] = useState(null);
+  const unreadNotifications = 0;
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setErrorMessage('');
@@ -95,9 +94,6 @@ const HomePage = ({ setErrorMessage }) => {
       const unreadRequestsRes = await api.get('/api/friend/requests/unread-count');
       setUnreadFriendRequests(unreadRequestsRes.data.count || 0);
 
-      const unreadMessagesRes = await api.get('/api/messages/unread-count');
-      setUnreadMessages(unreadMessagesRes.data.count || 0);
-
       try {
         const unreadCountsPerFriendRes = await api.get('/api/messages/unread-counts-per-friend');
         setUnreadMessagesPerFriend(unreadCountsPerFriendRes.data || {});
@@ -118,11 +114,11 @@ const HomePage = ({ setErrorMessage }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [setErrorMessage]);
 
   useEffect(() => {
     fetchData();
-  }, [setErrorMessage]);
+  }, [fetchData]);
 
   const handleSendFriendRequest = async (receiverEmail) => {
     try {
@@ -177,7 +173,6 @@ const HomePage = ({ setErrorMessage }) => {
     }
   };
 
-  const getUsername = (email) => emailToUsername[email] || email;
   const UserCard = ({ user }) => (
     <div className="glass-morphism rounded-2xl p-6 card-hover animate-fadeInUp backdrop-blur-sm border border-white/20">
       <div className="flex items-center space-x-3 mb-4">
@@ -309,7 +304,6 @@ const HomePage = ({ setErrorMessage }) => {
     
     const meetingEnd = new Date(meetingStart.getTime() + (meeting.duration * 60 * 1000));
     const isFuture = now < meetingStart;
-    const isActive = now >= meetingStart && now <= meetingEnd;
     const isCompleted = now > meetingEnd;
     
     // Don't display completed meetings - they should be deleted from backend

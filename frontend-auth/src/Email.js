@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from './axios';
 
@@ -12,7 +12,7 @@ const Email = ({email}) => {
   const navigate = useNavigate();
 
   // Fetch timer from backend and calculate based on DB creation time + 1 minute
-  const fetchTimer = async () => {
+  const fetchTimer = useCallback(async () => {
     try {
       const response = await api.get(`/otp/timer/${encodeURIComponent(email)}`);
       const data = response.data;
@@ -53,7 +53,7 @@ const Email = ({email}) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [email]);
 
   // Reset component state when email changes (new OTP generated)
   useEffect(() => {
@@ -62,7 +62,7 @@ const Email = ({email}) => {
     setErrorMessage('');
     setTimeLeft(60);
     setIsVerifying(false); // Reset verification flag when new OTP is generated
-  }, [email]);
+  }, [email, fetchTimer]);
 
   // Initial fetch and periodic sync with backend
   useEffect(() => {

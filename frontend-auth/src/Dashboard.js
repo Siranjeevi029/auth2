@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from './axios';
 
@@ -16,17 +16,13 @@ const Dashboard = () => {
   const [recentActivity, setRecentActivity] = useState([]);
   const [quickStats, setQuickStats] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [systemHealth, setSystemHealth] = useState({
+  const [systemHealth] = useState({
     status: 'online',
     lastSync: new Date(),
     notifications: true
   });
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -48,9 +44,13 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchStats, generateRecentActivity, generateQuickStats]);
 
-  const fetchStats = async () => {
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
+
+  const fetchStats = useCallback(async () => {
     try {
       // Fetch various statistics from different endpoints
       const [friendsRes, requestsRes, matchesRes, messagesRes] = await Promise.all([
@@ -71,9 +71,9 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Failed to fetch stats:', error);
     }
-  };
+  }, []);
 
-  const generateRecentActivity = () => {
+  const generateRecentActivity = useCallback(() => {
     const activities = [
       { id: 1, type: 'connection', message: 'New connection request received', time: '2 minutes ago', icon: '👥' },
       { id: 2, type: 'message', message: 'New message from John Doe', time: '15 minutes ago', icon: '💬' },
@@ -82,9 +82,9 @@ const Dashboard = () => {
       { id: 5, type: 'meeting', message: 'Upcoming meeting in 30 minutes', time: '3 hours ago', icon: '🎥' }
     ];
     setRecentActivity(activities);
-  };
+  }, []);
 
-  const generateQuickStats = () => {
+  const generateQuickStats = useCallback(() => {
     const stats = [
       { label: 'Response Rate', value: '95%', trend: 'up', color: 'green' },
       { label: 'Avg. Session Time', value: '45m', trend: 'up', color: 'blue' },
@@ -92,7 +92,7 @@ const Dashboard = () => {
       { label: 'Skills Learning', value: '8', trend: 'up', color: 'orange' }
     ];
     setQuickStats(stats);
-  };
+  }, []);
 
   const StatCard = ({ title, value, icon, color = 'red', trend }) => (
     <div className="glass-morphism rounded-2xl p-6 card-hover animate-fadeInUp backdrop-blur-sm border border-white/20">
