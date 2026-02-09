@@ -53,7 +53,7 @@ const Email = ({email}) => {
     } finally {
       setLoading(false);
     }
-  }, [email, fetchTimer]);
+  }, [email]);
 
   // Reset component state when email changes (new OTP generated)
   useEffect(() => {
@@ -62,7 +62,7 @@ const Email = ({email}) => {
     setErrorMessage('');
     setTimeLeft(60);
     setIsVerifying(false); // Reset verification flag when new OTP is generated
-  }, [email, fetchTimer]);
+  }, [email]);
 
   // Initial fetch and periodic sync with backend
   useEffect(() => {
@@ -74,7 +74,7 @@ const Email = ({email}) => {
       
       return () => clearInterval(syncInterval);
     }
-  }, [email]);
+  }, [email, fetchTimer]);
 
   // Local countdown timer for smooth second-by-second display
   useEffect(() => {
