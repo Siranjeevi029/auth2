@@ -8,6 +8,9 @@ import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ import java.io.IOException;
 
 @Service
 public class EmailService {
+
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
 
     @Value("${sendgrid.api.key}")
     private String apiKey;
@@ -28,9 +33,32 @@ public class EmailService {
     @Value("${sendgrid.data.residency:}")
     private String dataResidency;
 
+    @PostConstruct
+    void logConfig() {
+        if (apiKey == null || apiKey.isBlank()) {
+            log.error("SENDGRID_API_KEY is missing");
+        } else {
+            log.info("SENDGRID_API_KEY is set");
+        }
+
+        if (fromEmail == null || fromEmail.isBlank()) {
+            log.error("SENDGRID_FROM_EMAIL is missing");
+        } else {
+            log.info("SendGrid from email: {}", fromEmail);
+        }
+
+        if (replyToEmail != null && !replyToEmail.isBlank()) {
+            log.info("SendGrid reply-to email: {}", replyToEmail);
+        }
+
+        if (dataResidency != null && !dataResidency.isBlank()) {
+            log.info("SendGrid data residency: {}", dataResidency);
+        }
+    }
+
     public void sendEmail(String to, String subject, String body) throws Exception {
         try {
-            System.out.println("Attempting to send email to: " + to);
+            log.info("Attempting to send email to: {}", to);
 
             if (apiKey == null || apiKey.isBlank()) {
                 throw new IllegalStateException("SENDGRID_API_KEY is missing");
@@ -71,9 +99,9 @@ public class EmailService {
                 throw new IOException("SendGrid error: status=" + status + " body=" + response.getBody());
             }
 
-            System.out.println("Email sent successfully to: " + to);
+            log.info("Email sent successfully to: {}", to);
         } catch (Exception e) {
-            System.err.println("Email sending failed for " + to + ": " + e.getMessage());
+            log.error("Email sending failed for {}", to, e);
             throw e;
         }
     }
